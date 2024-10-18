@@ -1,0 +1,153 @@
+#include <iostream>
+#include <cstring>
+using namespace std;
+class Stud {
+public:
+    int rollno, target;
+    char name[50], grade[20], tar[20]; 
+    string surveyResult;
+    void accept() {
+        cout << "Enter the name of the student: ";
+        cin.ignore(); 
+        cin.getline(name, 50);
+        cout << "Enter the roll_no of the student: ";
+        cin >> rollno;
+        cin.ignore();
+        cout << "Enter the Class of student: ";
+        cin.getline(grade, 20);
+    }
+    void linear_search(Stud info[], int n) {
+        cout << "Enter the rollno student which you want to search: ";
+        cin >> target;
+        cout << "Enter the class student which you want to search: ";
+        cin.ignore();
+        cin.getline(tar, 20);
+        int flag = 0;
+        for (int i = 0; i < n; i++) {
+            if (info[i].rollno == target && strcmp(info[i].grade, tar) == 0) {
+                cout << "Student is present." << endl;
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 0) {
+            cout << "Student is not present." << endl;
+        }
+    }
+    void binary_search(Stud info[], int n) {
+        cout << "Enter the roll number which you want to search: ";
+        cin >> target;
+        cout << "Enter the class student which you want to search: ";
+        cin.ignore();
+        cin.getline(tar, 20);
+        
+        int low = 0, high = n - 1;
+        int flag = 0;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (info[mid].rollno == target) {
+                if (strcmp(info[mid].grade, tar) == 0) {
+                    cout << "Student is present." << endl;
+                    flag = 1;
+                    break;
+                } else {
+                   
+                    break; 
+                }
+            } else if (info[mid].rollno < target) {
+                low = mid+1;
+            } else {
+                high = mid-1;
+            }
+        }
+        if (flag == 0) {
+            cout << "Student is not present." << endl;
+        }
+    }
+    void survey() {
+        int a, b, c, d, e, count = 0;
+        cout << "PLEASE ANSWER THE FOLLOWING QUESTIONS (1 for Yes, 0 for No):" << endl;
+        cout << "1. Did you understand the purpose of this training program at the start of the event? ";
+        cin >> a;
+        if (a == 1) count++;
+        
+        cout << "2. Did the training meet your expectations? ";
+        cin >> b;
+        if (b == 1) count++;
+        
+        cout << "3. Overall, how would you rate the training instructor? (1 for Excellent, 0 for Poor) ";
+        cin >> c;
+        if (c == 1) count++;
+        
+        cout << "4. Was the training program well organized and easy to follow? ";
+        cin >> d;
+        if (d == 1) count++;
+        
+        cout << "5. Do you feel you were given enough time and resources to complete the training? ";
+        cin >> e;
+        if (e == 1) count++;
+        int surveyPercentage = (count * 100) / 5;
+        surveyResult = (surveyPercentage > 60) ? "Yes" : "No";
+    }
+    void display() const {
+        cout <<name<< "\t\t" << rollno << "\t\t" << grade << "\t\t" << surveyResult << endl;
+    }
+};
+void sort_students(Stud info[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (info[j].rollno < info[i].rollno) {
+                Stud temp = info[i];
+                info[i] = info[j];
+                info[j] = temp;
+            }
+        }
+    }
+}
+int main() {
+    Stud info[10];
+    int n = 0, ch, t = 0;
+    do {
+        cout << "1. Insert the data\n2. Linear Search\n3. Binary Search\n4. Survey\n5. Display\nEnter your choice from above: ";
+        cin >> ch;
+        switch (ch) {
+            case 1:
+                cout << "Enter the number of student data you want to insert : ";
+                cin >> n;
+                if (n > 10) n = 10;
+                if (n < 1) n = 1; 
+                for (int i = 0; i < n; i++) {
+                    info[i].accept();
+                }
+                break;
+            case 2:
+                
+                    info[1].linear_search(info, n);
+                
+                break;
+            case 3:
+                sort_students(info, n);
+                
+                    info[1].binary_search(info, n);
+                
+                break;
+            case 4:
+                for (int i = 0; i < n; ++i) {
+                    info[i].survey();
+                }
+                break;
+            case 5:
+                cout << "Name\t\tRoll_no\t\tClass\t\tSurvey Result" << endl;
+                for (int i = 0; i < n; i++) {
+                    info[i].display();
+                }
+                break;
+            default:
+                cout << "Invalid choice" << endl;
+                break;
+        }
+        cout << "DO YOU WANT TO CONTINUE [PRESS 1] else press 0: ";
+        cin >> t;
+    } while (t == 1);
+    return 0;
+}
